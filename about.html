@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Barpeta Road | An Immersive Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #0a0a0a;
+            --container-background: #1a1a1a;
+            --glass-background: rgba(26, 26, 26, 0.6); /* For Glassmorphism effect */
+            --primary-text-color: #f0f0f0;
+            --secondary-text-color: #a0a0a0;
+            --accent-color: #00aaff;
+            --accent-glow: rgba(0, 170, 255, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--primary-text-color);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.7; /* Increased for better readability */
+        }
+        
+        /* --- PARTICLE.JS BACKGROUND (ADDED) --- */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind everything */
+        }
+        
+        /* --- HOME BUTTON STYLES (MODIFIED) --- */
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px; /* MODIFIED from right to left */
+            z-index: 1001; 
+            width: 50px;
+            height: 50px;
+            background-color: var(--container-background);
+            border: 1px solid transparent;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s;
+        }
+
+        .home-button svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--primary-text-color);
+            transition: fill 0.3s ease;
+        }
+
+        .home-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4), 0 0 15px var(--accent-glow);
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        .home-button:hover svg {
+            fill: var(--background-color);
+        }
+        /* --- END OF HOME BUTTON STYLES --- */
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* --- IMPROVED JUSTIFIED TEXT (ADDED) --- */
+        .history-content p, .card p, #people .container > p {
+            text-align: justify;
+            hyphens: auto; /* Helps break long words to avoid large gaps */
+        }
+
+        /* Animation & Utility Classes */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal-element.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- TITLE ANIMATION (ADDED) --- */
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem; /* Increased margin */
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block; /* Required for pseudo-element positioning */
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--accent-color);
+            transition: width 0.8s ease-out;
+        }
+
+        .reveal-element.visible .section-title::after {
+            width: 80%;
+        }
+
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-text-color);
+            margin-bottom: 4rem;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Section 1: Hero */
+        #hero {
+             background-image: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.7)), url('https://images.unsplash.com/photo-1549642282-132a8264e1e3?q=80&w=2070&auto=format&fit=crop');
+             background-size: cover;
+             background-position: center;
+             background-attachment: fixed; /* Parallax effect */
+        }
+        
+        /*
+           FIX APPLIED HERE:
+           The parent <section id="hero"> uses flexbox to center its child (.container).
+           We do not need any specific rules for #hero .container itself, so the rule block was removed.
+        */
+       
+        #hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+        }
+
+        #hero p {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            color: var(--secondary-text-color);
+            margin-top: 1rem;
+        }
+        
+        .animated-text span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(30px) rotate(10deg);
+            animation: reveal-letter 1s forwards;
+        }
+        
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2.5s infinite;
+        }
+
+        .scroll-down a {
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-size: 2.5rem;
+        }
+
+        /* Section 2: History (Alternating Layout) */
+        .history-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            text-align: left;
+        }
+
+        .history-item:nth-child(even) .history-image {
+            order: 2;
+        }
+        
+        /* --- KEN BURNS EFFECT (ADDED) --- */
+        .history-image {
+            overflow: hidden; /* Hide the parts of image that scale outside the box */
+            border-radius: 10px;
+        }
+        .history-image img {
+            width: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            animation: ken-burns 20s infinite alternate ease-in-out;
+        }
+        .history-item:hover .history-image img {
+            transform: scale(1.05) rotate(1deg);
+            animation-play-state: paused; /* Pause animation on hover */
+        }
+        
+        .history-content h3 {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem; /* More space */
+        }
+        
+        /* --- Glassmorphism Cards Effect (MODIFIED) --- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--glass-background);
+            backdrop-filter: blur(10px); /* The frosted glass effect */
+            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            border-radius: 12px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+            transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 20px var(--accent-glow);
+        }
+
+        .card h3 {
+            color: var(--primary-text-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+
+        /* Section 4: Landmarks (Image Gallery with Modal) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item::after {
+            content: 'VIEW';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 170, 255, 0.7);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        /* Section 5: People */
+        #people .container {
+            max-width: 960px;
+        }
+
+        /* Image Modal (Lightbox) Styles */
+        #imageModal {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0s 0.4s linear;
+        }
+        
+        #imageModal.visible {
+            opacity: 1; visibility: visible;
+            transition-delay: 0s;
+        }
+
+        .modal-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            transform: scale(0.8);
+            transition: transform 0.4s ease;
+        }
+        
+        #imageModal.visible .modal-content {
+            transform: scale(1);
+        }
+
+        #modalImage { width: 100%; height: 100%; object-fit: contain; }
+
+        .close-modal {
+            position: absolute; top: 1.5rem; right: 2.5rem;
+            color: white; font-size: 3rem; font-weight: bold; cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .close-modal:hover { color: var(--accent-color); transform: rotate(90deg); }
+
+        /* Animation Keyframes */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -25px); }
+            60% { transform: translate(-50%, -12px); }
+        }
+        @keyframes reveal-letter {
+            to { opacity: 1; transform: translateY(0) rotate(0); }
+        }
+        @keyframes ken-burns {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.15) translate(5px, -5px); }
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .section {
+                padding: 4rem 1.5rem;
+            }
+
+            .section-title { font-size: 2.2rem; }
+            .section-subtitle { font-size: 1rem; }
+            
+            /* --- Responsive Text Alignment (MODIFIED) --- */
+            .history-content p, .card p, #people .container > p {
+                text-align: left; /* Switch to left-align on mobile for better readability */
+                hyphens: none;
+            }
+
+            .history-item {
+                grid-template-columns: 1fr;
+            }
+            .history-item:nth-child(even) .history-image {
+                order: 0;
+            }
+            .history-content {
+                text-align: center; /* Center heading on mobile */
+            }
+            .history-content h3 {
+                 margin-top: 1.5rem;
+            }
+
+            /* Responsive adjustments for home button */
+            .home-button {
+                width: 45px;
+                height: 45px;
+                top: 15px;
+                left: 15px; /* MODIFIED from right to left */
+            }
+
+            .home-button svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PARTICLE.JS BACKGROUND (ADDED) -->
+    <div id="particles-js"></div>
+
+    <!-- HOME BUTTON -->
+    <a href="#" class="home-button" aria-label="Go to Homepage">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+    </a>
+
+    <!-- Section 1: Hero -->
+    <section id="hero" class="section">
+        <div class="container">
+            <h1 class="animated-text">Welcome to Barpeta Road</h1>
+            <p class="animated-text">Discover the heart and soul of our city.</p>
+        </div>
+        <div class="scroll-down">
+            <a href="#history" aria-label="Scroll to next section">&#8595;</a>
+        </div>
+    </section>
+
+    <!-- Section 2: History -->
+    <section id="history" class="section">
+        <div class="container">
+            <div class="reveal-element">
+                <h2 class="section-title">Our Rich History</h2>
+                <p class="section-subtitle">Journey through time and witness the milestones that shaped our vibrant community.</p>
+            </div>
+            
+            <div class="history-item reveal-element">
+                <div class="history-image">
+                    <img src="images/istockphoto-535499464-612x612.jpg" alt="Vintage view of Athiabari">
+                </div>
+                <div class="history-content">
+                    <h3>Athiabari: The History</h3>
+                    <p>Barpeta Road did not find a place on the map of Assam until 1927 AD. It was known as Athiabari Gaon, which is surrounded by dense forest. The inhabitant of this village were Assamese, Boro, Koch, Chaotal, Nepali and Pamua Muslims. It was said that animals such as tigers and bears roamed freely during the day and afternoon. There was no easy road to Barpeta town, the then headquarters of Barpeta sub-division. There was only a small forest road near the village of Halapakuri near Howly. This road was used by people to travel to Barpeta in groups. for no one dared to come and go alone. There was no road to do so and the necessary materials had to be carried by bullock carts. There were two or four carts that had to go together. Otherwise, in daylight The tiger took the cow from the cart. People did not dare to come here alone.</p>
+                </div>
+            </div>
+
+            <div class="history-item reveal-element">
+                <div class="history-image">
+                    <img src="images/Screenshot 2025-10-14 173056.png" alt="Early railway development">
+                </div>
+                <div class="history-content">
+                    <h3>Barpeta Road: The Founding Year</h3>
+                    <p>In 1927, plans were made to establish a railway station at Athiabari. The railway station was inaugurated by the then Government Lawyer of Barpeta city, Shri Lohit Chandra Nayak and renamed as Barpeta Road. There is no easy road for motor vehicles to travel from Barpeta to Barpeta Road railway station. Therefore, it is necessary to take measures to prevent the spread of the disease. This road is still known as the Barpeta-Safakamar road. After the establishment of the railway station, Bengalis from East Bengal and to some extent Marwaris from Rajasthan gradually migrated to Athiabari village and with this, Assamese people from Barpeta came and settled here for the purpose of trade and livelihood. After this, the number of Assamese people gradually increased in the village of Athiabari. The establishment of the railway station became the nucleus around which the settlement grew. Originally known as Athiyabari, the town’s identity gradually shifted to Barpeta Road, named after the road/rail link to Barpeta town and the station itself, which played a pivotal role in trade and connectivity. The first President was Amulya Kumar Biswas and the vice-president was Dhirendra Nath Das.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Culture -->
+    <section id="culture" class="section">
+        <div class="container">
+             <div class="reveal-element">
+                <h2 class="section-title">Vibrant Culture</h2>
+                <p class="section-subtitle">Experience the Traditions, Flavors, and Commercial Hub.</p>
+            </div>
+            <div class="card-grid">
+                <div class="card reveal-element">
+                    <h3>Festivals</h3>
+                    <p>Barpeta Road is a vibrant town where culture and faith blend beautifully. People here celebrate festivals like Bihu, Doul Utsav (Holi), Diwali, Eid and Durga Puja with great devotion and joy. During these times, the streets fill with colours, music, and traditional dances, while fairs and Naam-Kirtans bring everyone together. Local markets come alive with festive food, crafts, and laughter. These celebrations reflect the unity, spirituality, and cheerful spirit that define the heart of Barpeta Road.</p>
+                </div>
+                <div class="card reveal-element" style="transition-delay: 200ms;">
+                    <h3>Cuisine</h3>
+                    <p>The cuisine of Barpeta Road reflects the rich taste of Assamese tradition with a local twist. People here love simple yet flavorful dishes made from fresh fish, rice, and seasonal vegetables. Popular local foods include pitha, laru, tenga fish curry, and various bamboo shoot dishes. Street food stalls and local tea shops also serve unique snacks, giving residents and visitors a taste of everyday Assamese flavors. The food of Barpeta Road truly captures the warmth, hospitality, and natural flavours of Assam.</p>
+                </div>
+                <div class="card reveal-element" style="transition-delay: 400ms;">
+                    <h3>Commercial Hub</h3>
+                    <p>Barpeta Road is widely known as the commercial heart of Lower Assam, famous for its busy markets and wholesale trade. The town has become a major center for fish, vegetables, rice, and grocery supplies, attracting traders from nearby districts and even neighbouring states. Its strategic location along the railway and highway routes makes it a key link for business and transportation. Barpeta Road plays a vital role in supporting the region’s economy and livelihoods.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Section 4: Landmarks -->
+    <section id="landmarks" class="section">
+        <div class="container">
+            <div class="reveal-element">
+                <h2 class="section-title">Iconic Landmarks</h2>
+                <p class="section-subtitle">Explore the sights that tell the story of our city. Click any image to see a larger view.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item reveal-element">
+                    <img src="https://via.placeholder.com/300x300.png?text=Landmark+1" alt="Landmark 1" data-full="https://via.placeholder.com/1200x800.png?text=Landmark+1+Full+View">
+                </div>
+                <div class="gallery-item reveal-element" style="transition-delay: 100ms;">
+                    <img src="https://via.placeholder.com/300x300.png?text=Landmark+2" alt="Landmark 2" data-full="https://via.placeholder.com/1200x800.png?text=Landmark+2+Full+View">
+                </div>
+                <div class="gallery-item reveal-element" style="transition-delay: 200ms;">
+                    <img src="https://via.placeholder.com/300x300.png?text=Landmark+3" alt="Landmark 3" data-full="https://via.placeholder.com/1200x800.png?text=Landmark+3+Full+View">
+                </div>
+                <div class="gallery-item reveal-element" style="transition-delay: 300ms;">
+                    <img src="https://via.placeholder.com/300x300.png?text=Landmark+4" alt="Landmark 4" data-full="https://via.placeholder.com/1200x800.png?text=Landmark+4+Full+View">
+                </div>
+                <div class="gallery-item reveal-element" style="transition-delay: 400ms;">
+                    <img src="https://via.placeholder.com/300x300.png?text=Landmark+5" alt="Landmark 5" data-full="https://via.placeholder.com/1200x800.png?text=Landmark+5+Full+View">
+                </div>
+                <div class="gallery-item reveal-element" style="transition-delay: 500ms;">
+                    <img src="https://via.placeholder.com/300x300.png?text=Landmark+6" alt="Landmark 6" data-full="https://via.placeholder.com/1200x800.png?text=Landmark+6+Full+View">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: People -->
+     <section id="people" class="section">
+        <div class="container reveal-element">
+            <h2 class="section-title">Our People</h2>
+            <p class="section-subtitle">The people of Barpeta Road are known for their warmth, unity, and hard-working nature. They come from diverse communities yet live together in peace and mutual respect. Most residents are engaged in business, farming, education, and traditional crafts that support the town’s growth. Hospitality is a way of life here — visitors are always welcomed with a smile and a cup of tea. The spirit of kindness, cooperation, and togetherness truly defines the people of Barpeta Road.</p>
+            <img src="https://via.placeholder.com/800x400.png?text=Community+Photo" alt="Our Community" style="width: 100%; border-radius: 10px; max-width: 800px;">
+        </div>
+    </section>
+    
+    <!-- Image Modal -->
+    <div id="imageModal">
+        <span class="close-modal" role="button" aria-label="Close image view">&times;</span>
+        <img class="modal-content" id="modalImage" alt="Enlarged landmark view">
+    </div>
+
+    <!-- PARTICLE.JS SCRIPT (ADDED) -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <script>
+        // --- PARTICLE.JS INITIALIZATION ---
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00aaff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00aaff", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 400, "line_linked": { "opacity": 1 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 100, "duration": 0.4 }, "push": { "particles_nb": 4 }, "remove": { "particles_nb": 2 } }
+            },
+            "retina_detect": true
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // --- SCROLL-TRIGGERED ANIMATIONS ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.2 /* A bit more of the element needs to be visible */
+            });
+
+            const elementsToReveal = document.querySelectorAll('.reveal-element');
+            elementsToReveal.forEach(el => observer.observe(el));
+
+            // --- HERO TEXT ANIMATION ---
+            const animatedTexts = document.querySelectorAll('.animated-text');
+            animatedTexts.forEach(text => {
+                let content = text.textContent;
+                text.innerHTML = ''; // Use innerHTML to handle spaces correctly
+                let letters = content.split('');
+                letters.forEach((letter, i) => {
+                    let span = document.createElement('span');
+                    span.textContent = letter;
+                    if (letter === ' ') span.style.width = "0.5em"; // Ensure spaces have width
+                    span.style.animationDelay = `${i * 0.05}s`;
+                    text.appendChild(span);
+                });
+            });
+
+            // --- IMAGE MODAL LOGIC ---
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const closeModal = document.querySelector('.close-modal');
+
+            galleryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const fullImageSrc = item.querySelector('img').getAttribute('data-full');
+                    modalImg.src = fullImageSrc;
+                    modal.classList.add('visible');
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                });
+            });
+
+            function hideModal() {
+                modal.classList.remove('visible');
+                 document.body.style.overflow = ''; // Restore background scrolling
+            }
+
+            closeModal.addEventListener('click', hideModal);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    hideModal();
+                }
+            });
+            // Also close on 'Escape' key
+            document.addEventListener('keydown', (e) => {
+                 if(e.key === "Escape" && modal.classList.contains('visible')){
+                     hideModal();
+                 }
+            })
+        });
+    </script>
+
+</body>
+</html>
